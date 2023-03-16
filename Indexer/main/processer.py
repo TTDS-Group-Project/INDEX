@@ -38,7 +38,7 @@ def jproc(index, atts, data):  # process incoming json
         row['sentiment'] = data['sentiment']
     if 'topic' in data.keys():
         row['category'] = data['topic']
-    if 'image_url' in data.keys():
+    if 'cover_image' in data.keys():
         row['image'] = data['cover_image']
 
     if 'authors' in data.keys():
