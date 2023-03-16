@@ -2,17 +2,12 @@ import multiprocessing
 import os
 
 import sys
-
 from kafka import KafkaConsumer
 import processer as bk
 import json
 import sql_interface as sq
 
 stop_event = multiprocessing.Event()
-
-"""
-TO BE RUN LIVE
-"""
 
 
 def mainX():
