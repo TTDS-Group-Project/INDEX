@@ -1,0 +1,26 @@
+
+####################
+attributes
+####################
+
+CREATE TABLE attributes(
+udid VARCHAR(255) PRIMARY KEY,
+title Text,
+date timestamp,
+url Text,
+author VARCHAR(255),
+publisher VARCHAR(255),
+sentiment VARCHAR(255),
+image Text,
+category VARCHAR(255),
+abstract VARCHAR(255)
+)
+
+####################
+word_index
+####################
+
+CREATE TABLE word_index(
+word VARCHAR(255) PRIMARY KEY,
+index JSONB
+)

@@ -1,0 +1,29 @@
+
+##################
+live_updater.py
+##################
+
+main() - will run when deployed
+
+Has a ready made kafka consumer:
+    If broker not available check:
+        1. correct IP
+        2. It is up and running
+        3. wifi
+        4. Other its is a very general problem
+
+
+Will run but will exit in an exception -> hence may need way around or an alert set-up?
+
+Main processing is bk.jproc -> returns the already chunky
+in-memory storage items perhaps better as objects
+?
+
+Check 10000 as a flush
+
+
+###################
+ff_updater.py
+###################
+
+
