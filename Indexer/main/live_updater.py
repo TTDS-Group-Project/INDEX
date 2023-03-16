@@ -54,8 +54,6 @@ def main():
                     index = bk.Inverted_Indexer()
                     atts = []
 
-            break
-
         # final flush
 
         sq.update_attributes(atts, sq.conn)
