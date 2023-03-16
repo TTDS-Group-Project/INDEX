@@ -25,7 +25,7 @@ def jproc(index, atts, data):  # process incoming json
     row = {'udid': str(data['uid']).replace("'", "").strip("b").replace("=", "").replace('"', "").replace(" ", ""),
            'title': data['headline'],
            'date': convert_to_date(data['date']).strftime("%Y-%m-%d %H:%M:%S"),
-           'url': data['url'],
+           'url': data['link'],
            'author': 'N/A',
            'publisher': data['publisher'],
            'sentiment': 'N/A',
@@ -47,9 +47,9 @@ def jproc(index, atts, data):  # process incoming json
 
 
     row['udid'] = (row['udid'])[:255]
-    word_list = (re.split("[^a-zA-Z]", row['udid']))
-    word_list = "".join(list(filter(bool, word_list)))
-    row['udid'] = word_list
+    # word_list = (re.split("[^a-zA-Z]", row['udid']))
+    # word_list = "".join(list(filter(bool, word_list)))
+    # row['udid'] = word_list
 
     try:
         text_ = data['text']

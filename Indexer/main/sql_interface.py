@@ -1,18 +1,26 @@
 import csv
 import json
-
+import os
 import psycopg2
 
-unix_socket = '/cloudsql/{}'.format("ttds-group-project-376615:europe-west1:v1")
+HOST = '/cloudsql/{}'.format("ttds-group-project-376615:europe-west1:v1")
 
-# Connect to the PostgreSQL database
-conn = psycopg2.connect(
+conn = None
+if os.getenv("K_REVISION"):
+    conn = psycopg2.connect(
     dbname="v6-FV",
     user="postgres",
-    password="TTDS1234",
-    host=unix_socket,
-    port="5432"
-)
+    password="ttds1234",
+    host=HOST,
+    )
+else:
+    conn = psycopg2.connect(
+        dbname="v6-FV",
+        user="postgres",
+        password="ttds1234",
+        host="34.76.187.212",
+        port="5432"
+    )
 
 
 
@@ -39,6 +47,9 @@ def update_attributes(atts_list, conn):
 
             for row in atts_list]
 
+    # print("ATTRIBUTES !!!!!!!!!!!!!!!!!!!!!! ")
+    # print(atts)
+
     # Execute insert statement
     cur.executemany(insert_statement, atts)
 
@@ -49,14 +60,16 @@ def update_attributes(atts_list, conn):
 def update_words(index, conn):
     cur = conn.cursor()
 
-    for key, value in index.index.items():
+    for word, value in index.index.items():
+        # print("KEY: " + word)
+        # print("VALUE: " + str(value))
 
         value = json.dumps(value)
 
-        word = key
         wi = value.replace('\\', '').replace('""', '"') # 
 
         execute_stmt = create_upsert(word, wi)  # returns update string with word and json formatted
+        # print("STATEMENT " +  execute_stmt)
 
         cur.execute(execute_stmt)
         conn.commit()
