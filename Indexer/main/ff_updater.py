@@ -1,8 +1,9 @@
+import datetime
 import json
 
 from processer import *
 import pandas as pd
-# import sql_interface as sq
+import sql_interface as sq
 
 
 """
@@ -24,7 +25,6 @@ def docs_to_csv(input_file, output_path):
             print(i)
 
         data = json.loads(row.to_json())
-
         atts, index = jproc(index, atts, data)
 
     # save files
@@ -38,15 +38,16 @@ def docs_to_csv(input_file, output_path):
               encoding='utf-8')
 
     df = pd.DataFrame.from_dict(atts)
-    df.to_csv(path_or_buf=output_path + 'atts.csv', encoding='utf-8', na_rep='N/A',
-              header=False,
-              index=False)
+    df.to_csv(path_or_buf=output_path + '/atts.csv', encoding='utf-8', na_rep='N/A',
+              index=False, header=False)
 
 
 # dataset to uploaded set db
 def docs_to_db(input_file):
     index = Inverted_Indexer()
     atts = []
+
+    time = datetime.now()
 
     df = pd.read_csv(input_file,
                      encoding='utf-8',
@@ -55,14 +56,20 @@ def docs_to_db(input_file):
     # process docs in df to index and attributes
     for i, row in df.iterrows():
         if i % 10000 == 0:
+            sq.update_attributes(atts, sq.conn)
+            sq.update_words(index, sq.conn)
             print(i)
+            index = Inverted_Indexer()
+            atts = []
 
         data = json.loads(row.to_json())
 
         atts, index = jproc(index, atts, data)
 
-    # sq.update_attributes(atts, sq.conn)
-    # sq.update_words(index, sq.conn)
+    sq.update_attributes(atts, sq.conn)
+    sq.update_words(index, sq.conn)
+
+    print(datetime.now() - time)
 
 
 def unique_keys():
@@ -77,12 +84,19 @@ def unique_keys():
                'category',
                'abstract']
 
-    df = pd.read_csv('C:/Users/Euan/Documents/DATA/TTDS/FV/atts.csv', header=None,
+    df = pd.read_csv('C:/Users/Euan/Documents/DATA/TTDS/FV-2/atts.csv',
                      names=columns)
 
     df = df.drop_duplicates(keep="first", subset=['udid'])
     df = df.dropna(subset=['udid'])
 
-    df.to_csv('C:/Users/Euan/Documents/DATA/TTDS/FV/test_atts.csv', index=False, header=False, na_rep='N/A')
+    df.to_csv('C:/Users/Euan/Documents/DATA/TTDS/FV-2/atts.csv', index=False, header=False, na_rep='N/A')
+
+
+
+if __name__=='__main__':
+
+    docs_to_db('C:/Users/Euan/Documents/DATA/TTDS/FV-2/bigdataset/bigdataset.csv')
+
 
 

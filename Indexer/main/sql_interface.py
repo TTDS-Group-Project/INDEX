@@ -15,7 +15,7 @@ if os.getenv("K_REVISION"):
     )
 else:
     conn = psycopg2.connect(
-        dbname="v6-FV",
+        dbname="TEST",
         user="postgres",
         password="ttds1234",
         host="34.76.187.212",

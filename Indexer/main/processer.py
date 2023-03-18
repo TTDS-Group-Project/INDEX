@@ -23,9 +23,9 @@ def convert_to_date(input_date):
 def jproc(index, atts, data):  # process incoming json
 
     row = {'udid': str(data['uid']).replace("'", "").strip("b").replace("=", "").replace('"', "").replace(" ", ""),
-           'title': data['headline'],
-           'date': convert_to_date(data['date']).strftime("%Y-%m-%d %H:%M:%S"),
-           'url': data['link'],
+           'title': data['title'],
+           'date': convert_to_date(data['date']).strftime("%Y-%m-%d"),
+           'url': data['url'],
            'author': 'N/A',
            'publisher': data['publisher'],
            'sentiment': 'N/A',
@@ -38,18 +38,16 @@ def jproc(index, atts, data):  # process incoming json
         row['sentiment'] = data['sentiment']
     if 'topic' in data.keys():
         row['category'] = data['topic']
-    if 'cover_image' in data.keys():
-        row['image'] = data['cover_image']
+    if 'image_url' in data.keys() and not (data['image_url'] is None):
+        row['image'] = data['image_url']
 
-    if 'authors' in data.keys():
-        if (type(data['authors']) is list) and not (data['authors'] == []):
-            row['author'] = data['authors'][0]
-
+    if 'author' in data.keys():
+        if (type(data['author']) is list) and not (data['author'] == []):
+            row['author'] = data['author'][0]
+        elif (type(data['author']) is str) and not(data['author'] is None):
+            row['author'] = data['author']
 
     row['udid'] = (row['udid'])[:255]
-    # word_list = (re.split("[^a-zA-Z]", row['udid']))
-    # word_list = "".join(list(filter(bool, word_list)))
-    # row['udid'] = word_list
 
     try:
         text_ = data['text']
